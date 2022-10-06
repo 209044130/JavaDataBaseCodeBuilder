@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="basePane" minHeight="400.0" minWidth="600.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codedb.controller.FrameMain">
+   <top>
+      <SplitPane fx:id="topPane" orientation="VERTICAL" prefWidth="160.0" BorderPane.alignment="CENTER">
+         <items>
+            <MenuBar fx:id="menuBar">
+              <menus>
+                <Menu mnemonicParsing="false" text="文件">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="打开" />
+                  </items>
+                   <items>
+   
+                       <MenuItem mnemonicParsing="false" text="打开" />
+                   </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="编辑">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="编辑" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="帮助">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="工具" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </items>
+      </SplitPane>
+   </top>
+   <left>
+      <SplitPane fx:id="leftPane" dividerPositions="0.5" minWidth="150.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+        <items>
+            <TreeView fx:id="leftTreeView" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="leftListView" prefHeight="200.0" prefWidth="200.0" />
+        </items>
+      </SplitPane>
+   </left>
+   <center>
+      <FlowPane fx:id="centerPane" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="centerTopTextArea" />
+            <TextArea fx:id="centerBottomTextArea" />
+         </children>
+      </FlowPane>
+   </center>
+   <right>
+      <SplitPane fx:id="rightPane" orientation="VERTICAL" BorderPane.alignment="CENTER">
+         <items>
+            <ListView fx:id="rightListView" minWidth="100.0" prefWidth="120.0" />
+         </items>
+      </SplitPane>
+   </right>
+   <bottom>
+      <SplitPane fx:id="bottomPane" orientation="VERTICAL" BorderPane.alignment="CENTER">
+        <items>
+            <ProgressBar fx:id="bottomProcessBar" progress="0.0" />
+        </items>
+      </SplitPane>
+   </bottom>
+</BorderPane>
