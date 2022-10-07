@@ -1,32 +1,39 @@
 package com.codedb.utils;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DBTools
 {
-    public static boolean connectToDB()
+	/**
+	 * @Description 获取mysql连接
+	 * @Params [userName:用户名, password：密码]
+	 * @Return Connection对象
+	 **/
+	public static Connection connectToDB(String userName, String password) throws ClassNotFoundException, SQLException
     {
-        Statement stmt = null;
         Connection conn = null;
-        try
-        {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            //数据库名称
-            String dbName = "ahutoj";
-            String userName = "root";
-            String password = "cz2002610";
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", userName, password);
+		return conn;
+	}
 
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, userName, password);
-            stmt = conn.createStatement();
-            ResultSet count = stmt.executeQuery("select * from problem");
-            System.out.println(count);
-            stmt.close();
-            conn.close();
-        } catch (Exception e)
+	/**
+	 * @Description 获取数据库列表
+	 * @Params [connection]
+	 * @Return 数据库名称列表
+	 **/
+	public static List<String> showDatabases(Connection connection) throws Exception {
+		ResultSet schemas = connection.getMetaData().getCatalogs();
+		List<String> dbNames = new LinkedList<>();
+		while (schemas.next())
         {
-            e.printStackTrace();
-        } finally
-        {
+			dbNames.add((String) schemas.getObject("TABLE_CAT"));
         }
-        return true;
+		return dbNames;
     }
 }
