@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.text.*?>
@@ -42,13 +43,25 @@
                     <items>
                         <SplitPane fx:id="leftPane" dividerPositions="0.5" minWidth="200.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0">
                             <items>
-                                <TreeTableView fx:id="leftTreeTableView" minWidth="200.0" prefWidth="200.0" />
-                                <ListView fx:id="leftToolListView" minWidth="200.0" prefWidth="200.0" />
+                                <TreeTableView fx:id="leftTreeTableView" minWidth="200.0" prefWidth="200.0" styleClass="leftTreeTableView" />
+                                <ListView fx:id="leftToolListView" minWidth="200.0" prefWidth="200.0" styleClass="leftToolListView" />
                             </items>
                         </SplitPane>
                   <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0">
                     <tabs>
-                      <Tab text="Untitled Tab 2" />
+                      <Tab text="欢迎使用">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="欢迎使用" textFill="#0083ff" VBox.vgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Microsoft YaHei" size="34.0" />
+                                       </font>
+                                    </Label>
+                                    <Label maxWidth="1.7976931348623157E308" text="介绍" />
+                                 </children>
+                              </VBox>
+                           </content></Tab>
                     </tabs>
                   </TabPane>
                         <ListView fx:id="rightListView" minWidth="100.0" prefWidth="120.0" />

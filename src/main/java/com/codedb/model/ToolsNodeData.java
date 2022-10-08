@@ -2,7 +2,7 @@ package com.codedb.model;
 
 public class ToolsNodeData
 {
-    public static final Integer DB_NAME = 0;
+	public static final int DB_NAME = 0;
 
     private String name = "";
     private Integer type = 0;

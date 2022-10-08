@@ -33,11 +33,10 @@ public class MainApplication {
 			e.printStackTrace();
 		}
 		Scene scene = new Scene(p);
+		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
 		Stage stage = new Stage();
 		stage.setScene(scene);
-
 		init();
-
 		stage.show();
 	}
 
@@ -45,16 +44,22 @@ public class MainApplication {
 	 * @Description 初始化
 	 */
 	public void init() {
+		frameMain.setCon(connection);
 		initDBTreeView();
 	}
 
+	/**
+	 * @Description 初始化
+	 * @Params []
+	 * @Return
+	 **/
 	private void initDBTreeView() {
 		List<String> list = new LinkedList<>();
 		try {
-			list = DBTools.showDatabases(this.connection);
+			list = DBTools.getDatabasesName(this.connection);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		frameMain.setDBTreeViewData(list);
+		frameMain.init(list);
 	}
 }
