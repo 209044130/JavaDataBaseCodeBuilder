@@ -1,9 +1,12 @@
 package com.codedb.componentsHandler;
 
 import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.codedb.model.HistoryItemData;
 import com.codedb.model.TableInfoData;
 import com.codedb.utils.DBTools;
 
@@ -90,4 +93,35 @@ public class MainTabPaneHandle
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
+
+	// 清除所有页签
+	public static void clearAll() {
+		tabPane.getTabs().clear();
+		MainHistoryHandle.add("关闭所有页签", HistoryItemData.WARNING);
+	}
+
+	public static void clearAllStructureTab() {
+		List<Tab> tempTab = new LinkedList<>();
+		for (Tab temp : tabPane.getTabs()) {
+			if (temp.getText().contains("结构"))
+				tempTab.add(temp);
+		}
+		for (Tab i : tempTab) {
+			tabPane.getTabs().remove(i);
+		}
+		MainHistoryHandle.add("关闭所有表结构页签", HistoryItemData.WARNING);
+	}
+
+	public static void clearAllResultTab() {
+		List<Tab> tempTab = new LinkedList<>();
+		for (Tab temp : tabPane.getTabs()) {
+			if (temp.getText().contains("从数据集到数据库") || temp.getText().contains("从页面到数据库")
+					|| temp.getText().contains("从数据库到数据集") || temp.getText().contains("从数据集到页面"))
+				tempTab.add(temp);
+		}
+		for (Tab i : tempTab) {
+			tabPane.getTabs().remove(i);
+		}
+		MainHistoryHandle.add("关闭所有代码生成结果页签", HistoryItemData.WARNING);
+	}
 }

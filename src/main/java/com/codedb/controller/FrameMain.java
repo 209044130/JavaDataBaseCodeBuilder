@@ -1,8 +1,6 @@
 package com.codedb.controller;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,12 +13,14 @@ import com.codedb.utils.DBTools;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 
@@ -55,6 +55,9 @@ public class FrameMain {
 	private ListView<ToolsNodeData> leftToolListView;
 
 	@FXML
+	private VBox leftVBox;
+
+	@FXML
 	private ListView<HistoryItemData> rightHistoryListView;
 
 	@FXML
@@ -62,6 +65,12 @@ public class FrameMain {
 
 	@FXML
 	private TextField status;
+
+	@FXML
+	private CheckMenuItem menuShowAnnotation, menuUseIndex, menuUseHistory;
+
+	@FXML
+	private MenuItem menuCloseAllTab, menuCloseAllStructureTab, menuCloseAllResultTab, menuHello, menuClearHistory;
 
 	public void setCon(Connection con) {
 		this.con = con;
@@ -80,6 +89,8 @@ public class FrameMain {
 		MainTabPaneHandle.register(tabPane);
 		// 挂载历史记录管理器
 		MainHistoryHandle.register(rightHistoryListView);
+		// 菜单按钮挂载点击事件
+
 		// 数据库名渲染到treetableview
 		TreeItem<TreeNodeData> root = new TreeItem<TreeNodeData>(new TreeNodeData("MySQL", TreeNodeData.ROOT_NODE));
 		leftTreeTableView.setRoot(root);
@@ -153,7 +164,7 @@ public class FrameMain {
 	}
 
 	/**
-	 * @Description 选中后初始化
+	 * @Description 树状表选中后初始化
 	 * @Params [treeNodeData: 选中的对象]
 	 **/
 	public void initInfoAndTools(TreeNodeData treeNodeData) {
@@ -241,11 +252,10 @@ public class FrameMain {
 		ListCell listCell = new ListCell();
 		leftToolListView.getItems().add(new ToolsNodeData("表名称：" + title, ToolsNodeData.TABLE_NAME, dbName, title));
 		leftToolListView.getItems().add(new ToolsNodeData("显示表结构", ToolsNodeData.SHOW_TABLE_STRUCTURE, dbName, title));
-		leftToolListView.getItems()
-				.add(new ToolsNodeData("从ResultSet到数据库" + title, ToolsNodeData.RESULTSET_TO_DB, dbName, title));
-		leftToolListView.getItems().add(new ToolsNodeData("数据库名称：" + title, ToolsNodeData.DB_NAME, dbName, title));
-		leftToolListView.getItems().add(new ToolsNodeData("数据库名称：" + title, ToolsNodeData.DB_NAME, dbName, title));
-		leftToolListView.getItems().add(new ToolsNodeData("数据库名称：" + title, ToolsNodeData.DB_NAME, dbName, title));
+		leftToolListView.getItems().add(new ToolsNodeData("从数据集到数据库", ToolsNodeData.RESULTSET_TO_DB, dbName, title));
+		leftToolListView.getItems().add(new ToolsNodeData("从页面到数据库", ToolsNodeData.TEXT_TO_DB, dbName, title));
+		leftToolListView.getItems().add(new ToolsNodeData("从数据库到数据集", ToolsNodeData.DB_TO_RESULTSET, dbName, title));
+		leftToolListView.getItems().add(new ToolsNodeData("从数据集到页面", ToolsNodeData.RESULTSET_TO_TEXT, dbName, title));
 		// 绑定工具栏点击事件
 		leftToolListView.setOnMouseClicked(mouseEvent -> {
 			ToolsNodeData cell = leftToolListView.getSelectionModel().getSelectedItem();
@@ -259,41 +269,82 @@ public class FrameMain {
 					case ToolsNodeData.SHOW_TABLE_STRUCTURE :
 						MainToolsFunctionBinder.showTableInfo(con, cell.getDbName(), cell.getTableName());
 						break;
-					// resultset 到 db
+					// 数据集 到 数据库
 					case ToolsNodeData.RESULTSET_TO_DB :
-						MainToolsFunctionBinder.resultSetToDB(con, cell.getDbName(), cell.getTableName());
+						MainToolsFunctionBinder.resultSetToDB(con, cell.getDbName(), cell.getTableName(),
+								menuShowAnnotation.isSelected(), menuUseIndex.isSelected());
+						break;
+					// 从 页面 到 数据库
+					case ToolsNodeData.TEXT_TO_DB :
+						MainToolsFunctionBinder.frameToDB(con, cell.getDbName(), cell.getTableName(),
+								menuShowAnnotation.isSelected());
+						break;
+					// 从 数据库 到 数据集
+					case ToolsNodeData.DB_TO_RESULTSET :
+						MainToolsFunctionBinder.dbToResultSet(con, cell.getDbName(), cell.getTableName(),
+								menuShowAnnotation.isSelected());
+						break;
+					// 从 数据集 到 页面
+					case ToolsNodeData.RESULTSET_TO_TEXT :
+						MainToolsFunctionBinder.resultSetToFrame(con, cell.getDbName(), cell.getTableName(),
+								menuShowAnnotation.isSelected(), menuUseIndex.isSelected());
 						break;
 				}
 			}
 		});
 		MainStatusHandle.set("选中表 " + title);
+
 	}
 
-	public void test(String name) {
-		try {
-			// Class.forName("com.mysql.cj.jdbc.Driver");
-			// Connection con = DriverManager.getConnection(url, userName, password);
-			String sql1 = "SELECT * FROM city WHERE POPULATION < 100000";
-			PreparedStatement statement = con.prepareStatement(sql1);
-			statement.execute("use test");
-			ResultSet resultSet = statement.executeQuery();
-			String sql2 = "INSERT INTO city2 VALUES(?,?,?,?,?)";
-			statement = con.prepareStatement(sql2);
-			while (resultSet.next()) {
-				statement.setObject(1, resultSet.getObject("id"));
-				statement.setObject(2, resultSet.getObject("name"));
-				statement.setObject(3, resultSet.getObject("countrycode"));
-				statement.setObject(4, resultSet.getObject("district"));
-				statement.setObject(5, resultSet.getObject("population"));
-				statement.addBatch();
-			}
-			statement.executeBatch();
+	/**
+	 * @Description 打开介绍页面
+	 **/
+	public void menuHelloAction(ActionEvent actionEvent) {
 
-		} catch (Exception e) {
-			e.printStackTrace();
+	}
+
+	/**
+	 * @Description 关闭所有页签
+	 **/
+	public void menuCloseAllTabAction(ActionEvent actionEvent) {
+		MainTabPaneHandle.clearAll();
+	}
+
+	/**
+	 * @Description 关闭所有表结构页签
+	 **/
+	public void menuCloseAllStructureTabAction(ActionEvent actionEvent) {
+		MainTabPaneHandle.clearAllStructureTab();
+	}
+
+	/**
+	 * @Description 关闭所有代码生成结果页签
+	 **/
+	public void menuCloseAllResultTabAction(ActionEvent actionEvent) {
+		MainTabPaneHandle.clearAllResultTab();
+
+	}
+
+	/**
+	 * @Description 清空历史记录
+	 **/
+	public void menuClearHistoryAciton(ActionEvent actionEvent) {
+		MainHistoryHandle.clearAll();
+	}
+
+	/**
+	 * @Description 开启关闭历史记录
+	 **/
+	public void menuUseHistoryAction(ActionEvent actionEvent) {
+		boolean selected = menuUseHistory.isSelected();
+		MainHistoryHandle.setEnable(selected);
+		if (selected) {
+			leftVBox.setVisible(true);
+
+		} else {
+			MainHistoryHandle.clearAll();
+			leftVBox.setVisible(false);
 		}
-
 	}
 
 }
-

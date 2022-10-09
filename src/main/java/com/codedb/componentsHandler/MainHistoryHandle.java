@@ -7,7 +7,10 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
 public class MainHistoryHandle
-{	public static ListView<HistoryItemData> historyList;
+{
+	public static ListView<HistoryItemData> historyList;
+
+	private static boolean enable = true;
 
     public static void register(ListView<HistoryItemData> lv) {
         historyList = lv;
@@ -56,7 +59,22 @@ public class MainHistoryHandle
     }
 
     public static void add(int index, String content, int type) {
-        HistoryItemData historyItemData = new HistoryItemData(content, type);
-        historyList.getItems().add(index, historyItemData);
+		if (enable) {
+			HistoryItemData historyItemData = new HistoryItemData(content, type);
+			historyList.getItems().add(index, historyItemData);
+		}
     }
+
+	public static void clearAll() {
+		historyList.getItems().clear();
+	}
+
+	public static boolean isEnable() {
+		return enable;
+	}
+
+	public static void setEnable(boolean enable) {
+		MainHistoryHandle.enable = enable;
+	}
+
 }

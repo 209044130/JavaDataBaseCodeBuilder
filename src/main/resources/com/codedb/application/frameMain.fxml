@@ -26,19 +26,22 @@
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="编辑">
                            <items>
-                              <MenuItem fx:id="menuCloseAllTab" mnemonicParsing="false" text="关闭所有标签页" />
-                              <MenuItem fx:id="menuCloseAllStructureTab" mnemonicParsing="false" text="关闭所有结构标签页" />
-                              <MenuItem fx:id="menuCloseAllResultTab" mnemonicParsing="false" text="关闭所有生成结果标签页" />
+                              <MenuItem fx:id="menuCloseAllTab" mnemonicParsing="false" onAction="#menuCloseAllTabAction" text="关闭所有标签页" />
+                              <MenuItem fx:id="menuCloseAllStructureTab" mnemonicParsing="false" onAction="#menuCloseAllStructureTabAction" text="关闭所有表结构标签页" />
+                              <MenuItem fx:id="menuCloseAllResultTab" mnemonicParsing="false" onAction="#menuCloseAllResultTabAction" text="关闭所有生成结果标签页" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="menuClearHistory" mnemonicParsing="false" onAction="#menuClearHistoryAciton" text="清空历史记录" />
                            </items></Menu>
                         <Menu mnemonicParsing="false" text="设置">
                           <items>
                               <CheckMenuItem fx:id="menuShowAnnotation" mnemonicParsing="false" text="显示注释" />
                               <CheckMenuItem fx:id="menuUseIndex" mnemonicParsing="false" text="使用下标" />
+                              <CheckMenuItem fx:id="menuUseHistory" mnemonicParsing="false" onAction="#menuUseHistoryAction" selected="true" text="开启历史记录" />
                           </items>
                         </Menu>
                                 <Menu mnemonicParsing="false" text="帮助">
                                     <items>
-                                        <MenuItem fx:id="menuHello" mnemonicParsing="false" text="介绍" />
+                                        <MenuItem fx:id="menuHello" mnemonicParsing="false" onAction="#menuHelloAction" text="介绍" />
                                     </items>
                                 </Menu>
                             </menus>
@@ -68,18 +71,13 @@
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="欢迎使用" textFill="#0083ff" VBox.vgrow="ALWAYS">
-                                       <font>
-                                          <Font name="Microsoft YaHei" size="34.0" />
-                                       </font>
-                                    </Label>
-                                    <Label maxWidth="1.7976931348623157E308" text="介绍" />
+                                    <TextArea prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                            </content></Tab>
                     </tabs>
                   </TabPane>
-                  <VBox maxHeight="1.7976931348623157E308" prefWidth="100.0">
+                  <VBox fx:id="leftVBox" maxHeight="1.7976931348623157E308" prefWidth="100.0">
                      <children>
                         <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="历史记录" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                            <font>
