@@ -3,15 +3,51 @@ package com.codedb.model;
 public class ToolsNodeData
 {
 	public static final int DB_NAME = 0;
+	public static final int TABLE_NAME = 1;
+	public static final int SHOW_TABLE_STRUCTURE = 3;
+	public static final int RESULTSET_TO_DB = 4;
+	public static final int TEXT_TO_DB = 5;
+
+	public static final int DB_TO_RESULTSET = 11;
+
+	public static final int RESULTSET_TO_TEXT = 21;
+	public static final int TEXT_TO_RESULTSET = 22;
+	public static final int RESULTSET_TO_RESULTSET = 23;
 
     private String name = "";
-    private Integer type = 0;
+	private Integer type = 0;
+	private String dbName = "";
+	private String tableName = "";
 
-    public ToolsNodeData(String name, Integer type)
+	public ToolsNodeData(String name, Integer type, String dbName)
     {
         this.name = name;
         this.type = type;
+		this.dbName = dbName;
     }
+
+	public ToolsNodeData(String name, Integer type, String dbName, String tableName) {
+		this.name = name;
+		this.type = type;
+		this.dbName = dbName;
+		this.tableName = tableName;
+	}
+
+	public String getDbName() {
+		return dbName;
+	}
+
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 
     public String getName()
     {

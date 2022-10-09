@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.web.*?>
 <?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.text.*?>
@@ -26,13 +25,20 @@
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="编辑">
-                                    <items>
-                                        <MenuItem mnemonicParsing="false" text="编辑" />
-                                    </items>
-                                </Menu>
+                           <items>
+                              <MenuItem fx:id="menuCloseAllTab" mnemonicParsing="false" text="关闭所有标签页" />
+                              <MenuItem fx:id="menuCloseAllStructureTab" mnemonicParsing="false" text="关闭所有结构标签页" />
+                              <MenuItem fx:id="menuCloseAllResultTab" mnemonicParsing="false" text="关闭所有生成结果标签页" />
+                           </items></Menu>
+                        <Menu mnemonicParsing="false" text="设置">
+                          <items>
+                              <CheckMenuItem fx:id="menuShowAnnotation" mnemonicParsing="false" text="显示注释" />
+                              <CheckMenuItem fx:id="menuUseIndex" mnemonicParsing="false" text="使用下标" />
+                          </items>
+                        </Menu>
                                 <Menu mnemonicParsing="false" text="帮助">
                                     <items>
-                                        <MenuItem mnemonicParsing="false" text="工具" />
+                                        <MenuItem fx:id="menuHello" mnemonicParsing="false" text="介绍" />
                                     </items>
                                 </Menu>
                             </menus>
@@ -64,7 +70,7 @@
                            </content></Tab>
                     </tabs>
                   </TabPane>
-                        <ListView fx:id="rightListView" minWidth="100.0" prefWidth="120.0" />
+                        <ListView fx:id="rightHistoryListView" minWidth="100.0" prefWidth="120.0" />
                     </items>
                 </SplitPane>
                 <VBox alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" style="-fx-spacing: 0;" VBox.vgrow="ALWAYS">

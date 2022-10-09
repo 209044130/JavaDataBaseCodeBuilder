@@ -17,7 +17,8 @@ public class DBTools
     {
         Connection conn = null;
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", userName, password);
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306?useUnicode=true&characterEncoding=utf-8",
+				userName, password);
 		return conn;
 	}
 
