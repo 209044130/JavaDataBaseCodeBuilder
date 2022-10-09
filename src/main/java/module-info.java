@@ -13,4 +13,6 @@ module com.codedb {
     //暴露控制类给fxml
     opens com.codedb.controller to javafx.fxml;
     exports com.codedb.controller;
+    exports com.codedb.componentsHandler;
+    opens com.codedb.componentsHandler to javafx.fxml;
 }
