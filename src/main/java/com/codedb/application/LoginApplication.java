@@ -2,6 +2,8 @@ package com.codedb.application;
 
 import java.io.IOException;
 
+import com.codedb.utils.FrameManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +18,7 @@ public class LoginApplication extends Application {
 	@Override
 	public void start(Stage stage) {
 		// 登录数据库
-		FXMLLoader loginXML = new FXMLLoader(this.getClass().getResource("login.fxml"));
+		FXMLLoader loginXML = new FXMLLoader(getClass().getResource("/com/codedb/fxml/login.fxml"));
 		Parent p = null;
 		try {
 			p = loginXML.load();
@@ -26,5 +28,6 @@ public class LoginApplication extends Application {
 		Scene scene = new Scene(p);
 		stage.setScene(scene);
 		stage.show();
+		FrameManager.setFrame("Login", loginXML.getController(), stage);
 	}
 }

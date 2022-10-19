@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import com.codedb.application.MainApplication;
 import com.codedb.utils.DBTools;
+import com.codedb.utils.FrameManager;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 public class Login {
 	public static Connection con = null;
@@ -49,8 +49,7 @@ public class Login {
 			userNameText = "root";
 			passWordText = "cz2002610";
 			con = DBTools.connectToDB(userNameText, passWordText);
-			Stage stage = (Stage) statusText.getScene().getWindow();
-			stage.close();
+			FrameManager.closeFrame("Login");
 			MainApplication mainApplication = new MainApplication();
 			mainApplication.start(con);
 		} catch (SQLException ex) {

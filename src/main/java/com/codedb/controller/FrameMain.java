@@ -1,6 +1,10 @@
 package com.codedb.controller;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,11 +14,15 @@ import com.codedb.model.StaticImage;
 import com.codedb.model.ToolsNodeData;
 import com.codedb.model.TreeNodeData;
 import com.codedb.utils.DBTools;
+import com.codedb.utils.FrameManager;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +30,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class FrameMain {
@@ -70,7 +80,8 @@ public class FrameMain {
 	private CheckMenuItem menuShowAnnotation, menuUseIndex, menuUseHistory;
 
 	@FXML
-	private MenuItem menuCloseAllTab, menuCloseAllStructureTab, menuCloseAllResultTab, menuHello, menuClearHistory;
+	private MenuItem menuCreateDataBase, menuCloseAllTab, menuCloseAllStructureTab, menuCloseAllResultTab, menuHello,
+			menuClearHistory;
 
 	public void setCon(Connection con) {
 		this.con = con;
@@ -89,9 +100,8 @@ public class FrameMain {
 		MainTabPaneHandle.register(tabPane);
 		// 挂载历史记录管理器
 		MainHistoryHandle.register(rightHistoryListView);
-		// 菜单按钮挂载点击事件
-
 		// 数据库名渲染到treetableview
+		leftTreeTableView.getColumns().clear();
 		TreeItem<TreeNodeData> root = new TreeItem<TreeNodeData>(new TreeNodeData("MySQL", TreeNodeData.ROOT_NODE));
 		leftTreeTableView.setRoot(root);
 		TreeTableColumn<TreeNodeData, TreeNodeData> titleColumn = new TreeTableColumn<>("MySQL数据库");
@@ -160,6 +170,8 @@ public class FrameMain {
 				initInfoAndTools(item.getValue());
 			}
 		});
+		// 打开介绍页
+		MainTabPaneHandle.createHelloTab();
 		MainStatusHandle.set("准备就绪!", MainStatusHandle.SUCCESS);
 	}
 
@@ -296,11 +308,28 @@ public class FrameMain {
 
 	}
 
+	public void menuCreateDataBaseAction(ActionEvent actionEvent) {
+		Stage stage = new Stage();
+		stage.setTitle("创建数据库");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setResizable(false);
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/codedb/fxml/addDataBase.fxml"));
+		try {
+			Parent p = fxmlLoader.load();
+			stage.setScene(new Scene(p));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		stage.show();
+		FrameManager.setFrame("AddDataBase", fxmlLoader.getController(), stage);
+	}
+
 	/**
 	 * @Description 打开介绍页面
 	 **/
 	public void menuHelloAction(ActionEvent actionEvent) {
-
+		// 打开欢迎使用（介绍）界面
+		MainTabPaneHandle.createHelloTab();
 	}
 
 	/**
@@ -340,11 +369,30 @@ public class FrameMain {
 		MainHistoryHandle.setEnable(selected);
 		if (selected) {
 			leftVBox.setVisible(true);
-
 		} else {
 			MainHistoryHandle.clearAll();
 			leftVBox.setVisible(false);
 		}
 	}
 
+	public String handleAddDataBaseFrame(String dbName) {
+		PreparedStatement preparedStatement;
+		String error = "";
+		try {
+			preparedStatement = con.prepareStatement("CREATE DATABASE " + dbName + ";");
+			if (preparedStatement.executeUpdate() == 1) {
+				List<String> list = new LinkedList<>();
+				try {
+					list = DBTools.getDatabasesName(con);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				init(list);
+				MainHistoryHandle.add("创建数据库<" + dbName + ">成功", HistoryItemData.SUCCESS);
+			}
+		} catch (SQLException e) {
+			error = e.getMessage();
+		}
+		return error;
+	}
 }

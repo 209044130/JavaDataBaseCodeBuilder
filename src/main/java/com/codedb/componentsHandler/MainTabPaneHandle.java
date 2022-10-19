@@ -1,6 +1,7 @@
 package com.codedb.componentsHandler;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -93,6 +94,52 @@ public class MainTabPaneHandle
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
+
+	/**
+	 * @Description 打开欢迎界面(介绍)
+	 **/
+	public static void createHelloTab() {
+		String title = "欢迎使用";
+		for (Tab temp : tabPane.getTabs()) {
+			if (temp.getText().equals(title)) {
+				tabPane.getSelectionModel().select(temp);
+				return;
+			}
+		}
+		String content = "1.数据库工具使用方法\n" + "\t点击右侧树形图的数据库，在左下方就会出现对应的数据库工具栏\n" + "\n2.表工具使用方法\n"
+				+ "\t点击左侧树形图数据库后展开的表，在左下方就会出现表的工具栏，下面是对每一种工具使用方法的介绍。\n"
+				+ "\t(1)\"显示表结构\"：点击后会生成一个新的页签用于展示该表的字段结构，包括字段名称以及字段类型。\n"
+				+ "\t(2)\"从数据集到数据库\"：点击后会生成该表对应的将数据集写入数据库的Java代码模板。\n"
+				+ "\t(3)\"从页面到数据库\"：点击后会生成该表对应的将页面文本框数据写入数据库的Java代码模板。\n"
+				+ "\t(4)\"从数据库到数据集\"：点击后会生成该表对应的将数据库读入数据集的Java代码模板。\n"
+				+ "\t(5)\"从数据集到页面\"：点击后会生成该表对应的将数据集写入页面文本框的Java代码模板。\n";
+
+		Tab tab = new Tab();
+		tab.setText(title);
+		tab.setClosable(true);
+		TextArea textArea = new TextArea();
+		textArea.setText(content);
+		tab.setContent(textArea);
+		tabPane.getTabs().add(tab);
+		tabPane.getSelectionModel().select(tab);
+	}
+
+	public static void addTab(Tab tab) {
+		// 防止出现重名
+		String finalText = tab.getText();
+		String preText = tab.getText();
+		Integer index = 1;
+		List<String> texts = new ArrayList<>();
+		for (Tab temp : tabPane.getTabs()) {
+			texts.add(temp.getText());
+		}
+		while (texts.contains(finalText)) {
+			finalText = preText + "(" + index + ")";
+			index++;
+		}
+		tab.setText(finalText);
+		tabPane.getTabs().add(tab);
+	}
 
 	// 清除所有页签
 	public static void clearAll() {

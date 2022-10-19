@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.codedb.controller.FrameMain;
 import com.codedb.utils.DBTools;
+import com.codedb.utils.FrameManager;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,7 +24,7 @@ public class MainApplication {
 			return;
 		}
 		connection = con;
-		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("frameMain.fxml"));
+		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/com/codedb/fxml/frameMain.fxml"));
 		Parent p = null;
 		try {
 			// 加载并且保存控制类
@@ -38,6 +39,7 @@ public class MainApplication {
 		stage.setScene(scene);
 		init();
 		stage.show();
+		FrameManager.setFrame("FrameMain", loader.getController(), stage);
 	}
 
 	/**
