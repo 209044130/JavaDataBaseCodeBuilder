@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codedb.controller.AddTable">
+   <children>
+      <ToolBar maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <items>
+          <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddAction" text="新增字段" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteAction" text="删除字段" />
+        </items>
+      </ToolBar>
+      <SplitPane dividerPositions="0.8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
+        <items>
+            <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="字段名" />
+                <TableColumn prefWidth="75.0" text="类型" />
+                  <TableColumn prefWidth="75.0" text="长度" />
+                  <TableColumn prefWidth="75.0" text="小数点" />
+                  <TableColumn prefWidth="75.0" text="非NULL" />
+                  <TableColumn prefWidth="75.0" text="键" />
+                  <TableColumn prefWidth="75.0" text="注释" />
+              </columns>
+            </TableView>
+            <TextArea fx:id="textPreviewSQL" prefHeight="200.0" prefWidth="200.0" />
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

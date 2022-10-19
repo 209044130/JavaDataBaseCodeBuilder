@@ -1,25 +1,90 @@
 package com.codedb.componentsHandler;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
+import com.codedb.controller.FrameMain;
 import com.codedb.model.HistoryItemData;
+import com.codedb.model.TableInfoData;
 import com.codedb.utils.DBTools;
+import com.codedb.utils.FrameManager;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Tab;
 
 /**
  * @Description Tools功能绑定
  **/
 public class MainToolsFunctionBinder {
+	// 点击数据库名称
 	public static void dbName(String dbName) {
 		MainStatusHandle.set("选中数据库 " + dbName);
 	}
 
+	// 创建表
+	public static void addTable(Connection con, String dbName) {
+		FXMLLoader loader = new FXMLLoader(MainToolsFunctionBinder.class.getResource("/com/codedb/fxml/addTable.fxml"));
+		try {
+			Parent p = loader.load();
+			Tab tab = new Tab();
+			tab.setText("添加表(" + dbName + ")");
+			tab.setContent(p);
+			MainTabPaneHandle.addTab(tab);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	// 删除数据库
+	public static void removeDB(Connection con, String dbName) {
+		// 保存错误信息，以及确认是否报错.
+		MainProgressHandle.set(0);
+		String error = "";
+		try {
+			PreparedStatement preparedStatement = con.prepareStatement("DROP DATABASE " + dbName + ";");
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+			MainProgressHandle.set(0.5);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				preparedStatement.execute();
+				List<String> list = new LinkedList<>();
+				try {
+					list = DBTools.getDatabasesName(con);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				FrameMain parent = (FrameMain) FrameManager.getController("FrameMain");
+				parent.init(list);
+				MainHistoryHandle.add("删除数据库<" + dbName + ">成功", HistoryItemData.SUCCESS);
+			}
+		} catch (SQLException e) {
+			error = e.getMessage();
+		}
+		if (!error.equals("")) {
+			// 添加到历史记录
+			MainHistoryHandle.add("删除数据库<" + dbName + ">失败", HistoryItemData.ERROR);
+			// 显示异常信息
+			Alert alert = new Alert(Alert.AlertType.ERROR, error);
+			alert.show();
+		}
+		MainProgressHandle.set(1);
+	}
+
+	// 点击表名
 	public static void tableName(String tableName) {
 		MainStatusHandle.set("选中表 " + tableName);
 	}
 
+	// 显示表信息
 	public static void showTableInfo(Connection con, String parentTitle, String title) {
 		MainTabPaneHandle.showTableInfo(con, parentTitle, title);
 		MainHistoryHandle.add("显示" + title + "(" + parentTitle + ")结构");
@@ -33,7 +98,7 @@ public class MainToolsFunctionBinder {
 	public static void resultSetToDB(Connection con, String dbName, String tableName, boolean showAnnotation,
 			boolean useIndex) {
 		try {
-			ConcurrentMap<String, String> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			// 根据参数处理sql2语句的代码模板
@@ -92,7 +157,7 @@ public class MainToolsFunctionBinder {
 	 **/
 	public static void frameToDB(Connection con, String dbName, String tableName, boolean showAnnotation) {
 		try {
-			ConcurrentMap<String, String> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			// 根据参数处理sql1语句的代码模板
@@ -135,7 +200,7 @@ public class MainToolsFunctionBinder {
 	 **/
 	public static void dbToResultSet(Connection con, String dbName, String tableName, boolean showAnnotation) {
 		try {
-			ConcurrentMap<String, String> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			// 根据参数处理sql1语句的代码模板
@@ -162,7 +227,7 @@ public class MainToolsFunctionBinder {
 	public static void resultSetToFrame(Connection con, String dbName, String tableName, boolean showAnnotation,
 			boolean useIndex) {
 		try {
-			ConcurrentMap<String, String> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			String res = "";

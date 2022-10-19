@@ -11,11 +11,15 @@ import com.codedb.model.HistoryItemData;
 import com.codedb.model.TableInfoData;
 import com.codedb.utils.DBTools;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class MainTabPaneHandle
 {	public static TabPane tabPane;
@@ -38,7 +42,7 @@ public class MainTabPaneHandle
             }
         }
         // 创建新的tab
-        ConcurrentMap<String, String> table = new ConcurrentHashMap<>();
+		ConcurrentMap<String, TableInfoData> table = new ConcurrentHashMap<>();
         try {
             table = DBTools.getTableStructure(con, parentTitle, title);
         } catch (Exception e) {
@@ -48,18 +52,95 @@ public class MainTabPaneHandle
         tableInfo.setClosable(true);
         tableInfo.setText(tabName);
         VBox vBox = new VBox();
-        TableView<TableInfoData> tableView = new TableView<TableInfoData>();
-        TableColumn<TableInfoData, String> tableColumn1 = new TableColumn<TableInfoData, String>("字段名");
-        TableColumn<TableInfoData, String> tableColumn2 = new TableColumn<TableInfoData, String>("类型");
-        tableColumn1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableColumn2.setCellValueFactory(new PropertyValueFactory<>("type"));
-        tableColumn1.setMinWidth(180);
-        tableColumn2.setMinWidth(180);
-        tableView.getColumns().addAll(tableColumn1, tableColumn2);
+		TableView<TableInfoData> tableView = new TableView<TableInfoData>();
+		TableColumn<TableInfoData, String> tableColumn1 = new TableColumn<TableInfoData, String>("字段名");
+		TableColumn<TableInfoData, String> tableColumn2 = new TableColumn<TableInfoData, String>("类型");
+		TableColumn<TableInfoData, String> tableColumn3 = new TableColumn<TableInfoData, String>("长度");
+		TableColumn<TableInfoData, String> tableColumn4 = new TableColumn<TableInfoData, String>("小数点");
+		TableColumn<TableInfoData, Boolean> tableColumn5 = new TableColumn<TableInfoData, Boolean>("非NULL");
+		TableColumn<TableInfoData, Boolean> tableColumn6 = new TableColumn<TableInfoData, Boolean>("键");
+		TableColumn<TableInfoData, String> tableColumn7 = new TableColumn<TableInfoData, String>("注释");
+		tableColumn1.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(
+							TableColumn.CellDataFeatures<TableInfoData, String> tableInfoDataStringCellDataFeatures) {
+						ObservableValue<String> cell = new SimpleStringProperty(
+								tableInfoDataStringCellDataFeatures.getValue().getColumnName());
+						return cell;
+					}
+				});
+		tableColumn2.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(
+							TableColumn.CellDataFeatures<TableInfoData, String> tableInfoDataStringCellDataFeatures) {
+						ObservableValue<String> cell = new SimpleStringProperty(
+								tableInfoDataStringCellDataFeatures.getValue().getTypeName());
+						return cell;
+					}
+				});
+		tableColumn3.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(
+							TableColumn.CellDataFeatures<TableInfoData, String> tableInfoDataStringCellDataFeatures) {
+						ObservableValue<String> cell = new SimpleStringProperty(
+								tableInfoDataStringCellDataFeatures.getValue().getCharOctetLength());
+						return cell;
+					}
+				});
+		tableColumn4.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(
+							TableColumn.CellDataFeatures<TableInfoData, String> tableInfoDataStringCellDataFeatures) {
+						ObservableValue<String> cell = new SimpleStringProperty(
+								tableInfoDataStringCellDataFeatures.getValue().getNumPrecRadix());
+						return cell;
+					}
+				});
+		tableColumn5.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, Boolean>, ObservableValue<Boolean>>() {
+					@Override
+					public ObservableValue<Boolean> call(
+							TableColumn.CellDataFeatures<TableInfoData, Boolean> tableInfoDataBooleanCellDataFeatures) {
+						ObservableValue<Boolean> ret = new SimpleBooleanProperty(
+								tableInfoDataBooleanCellDataFeatures.getValue().isNullable());
+						return ret;
+					}
+				});
+		tableColumn5.setCellFactory(CheckBoxTableCell.forTableColumn(tableColumn5));
+		tableColumn6.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, Boolean>, ObservableValue<Boolean>>() {
+					@Override
+					public ObservableValue<Boolean> call(
+							TableColumn.CellDataFeatures<TableInfoData, Boolean> tableInfoDataBooleanCellDataFeatures) {
+						ObservableValue<Boolean> ret = new SimpleBooleanProperty(
+								tableInfoDataBooleanCellDataFeatures.getValue().isKey());
+						return ret;
+					}
+				});
+		tableColumn6.setCellFactory(CheckBoxTableCell.forTableColumn(tableColumn6));
+		tableColumn7.setCellValueFactory(
+				new Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>>() {
+					@Override
+					public ObservableValue<String> call(
+							TableColumn.CellDataFeatures<TableInfoData, String> tableInfoDataStringCellDataFeatures) {
+						ObservableValue<String> cell = new SimpleStringProperty(
+								tableInfoDataStringCellDataFeatures.getValue().getRemarks());
+						return cell;
+					}
+				});
+		tableView.getColumns().addAll(tableColumn1, tableColumn2, tableColumn3, tableColumn4, tableColumn5,
+				tableColumn6, tableColumn7);
+		for (TableColumn<TableInfoData, ?> temp : tableView.getColumns()) {
+			temp.setMinWidth(20);
+		}
         // 添加到数据源列表
         ObservableList<TableInfoData> data = FXCollections.observableArrayList();
         for (String k : table.keySet()) {
-            TableInfoData d = new TableInfoData(k, table.get(k));
+			TableInfoData d = table.get(k);
             data.add(d);
         }
         // 设置数据源

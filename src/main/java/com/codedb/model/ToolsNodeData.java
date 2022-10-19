@@ -3,16 +3,15 @@ package com.codedb.model;
 public class ToolsNodeData
 {
 	public static final int DB_NAME = 0;
-	public static final int TABLE_NAME = 1;
-	public static final int SHOW_TABLE_STRUCTURE = 3;
-	public static final int RESULTSET_TO_DB = 4;
-	public static final int TEXT_TO_DB = 5;
+	public static final int ADD_DB = 1;
+	public static final int REMOVE_DB = 10;
 
-	public static final int DB_TO_RESULTSET = 11;
-
-	public static final int RESULTSET_TO_TEXT = 21;
-	public static final int TEXT_TO_RESULTSET = 22;
-	public static final int RESULTSET_TO_RESULTSET = 23;
+	public static final int TABLE_NAME = 100;
+	public static final int SHOW_TABLE_STRUCTURE = 101;
+	public static final int RESULTSET_TO_DB = 102;
+	public static final int TEXT_TO_DB = 103;
+	public static final int DB_TO_RESULTSET = 104;
+	public static final int RESULTSET_TO_TEXT = 105;
 
     private String name = "";
 	private Integer type = 0;

@@ -100,6 +100,8 @@ public class FrameMain {
 		MainTabPaneHandle.register(tabPane);
 		// 挂载历史记录管理器
 		MainHistoryHandle.register(rightHistoryListView);
+		// 清空工具栏
+		leftToolListView.getItems().clear();
 		// 数据库名渲染到treetableview
 		leftTreeTableView.getColumns().clear();
 		TreeItem<TreeNodeData> root = new TreeItem<TreeNodeData>(new TreeNodeData("MySQL", TreeNodeData.ROOT_NODE));
@@ -221,6 +223,8 @@ public class FrameMain {
 		});
 		ListCell listCell = new ListCell();
 		leftToolListView.getItems().add(new ToolsNodeData("数据库名称：" + title, ToolsNodeData.DB_NAME, title));
+		leftToolListView.getItems().add(new ToolsNodeData("添加表", ToolsNodeData.ADD_DB, title));
+		leftToolListView.getItems().add(new ToolsNodeData("删除数据库", ToolsNodeData.REMOVE_DB, title));
 		// 绑定工具栏点击事件
 		leftToolListView.setOnMouseClicked(mouseEvent -> {
 			ToolsNodeData cell = leftToolListView.getSelectionModel().getSelectedItem();
@@ -230,6 +234,13 @@ public class FrameMain {
 					case ToolsNodeData.DB_NAME :
 						MainToolsFunctionBinder.dbName(cell.getDbName());
 						break;
+					case ToolsNodeData.ADD_DB :
+						MainToolsFunctionBinder.addTable(con, cell.getDbName());
+						break;
+					case ToolsNodeData.REMOVE_DB :
+						MainToolsFunctionBinder.removeDB(con, cell.getDbName());
+						break;
+
 				}
 			}
 		});

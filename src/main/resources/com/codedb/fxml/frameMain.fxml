@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 <AnchorPane minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codedb.controller.FrameMain">
     <children>
         <VBox alignment="CENTER" minHeight="400.0" minWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -14,8 +18,7 @@
                             <menus>
                                 <Menu mnemonicParsing="false" text="数据库">
                                     <items>
-                                        <MenuItem fx:id="menuCreateDataBase" mnemonicParsing="false"
-                                                  onAction="#menuCreateDataBaseAction" text="创建数据库"/>
+                                        <MenuItem fx:id="menuCreateDataBase" mnemonicParsing="false" onAction="#menuCreateDataBaseAction" text="创建数据库" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="编辑">
@@ -59,7 +62,7 @@
                         </VBox>
                             </items>
                         </SplitPane>
-                        <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0"/>
+                        <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" />
                   <VBox fx:id="leftVBox" maxHeight="1.7976931348623157E308" prefWidth="100.0">
                      <children>
                         <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="历史记录" textAlignment="CENTER" VBox.vgrow="ALWAYS">
@@ -74,12 +77,12 @@
                 </SplitPane>
                 <VBox alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" style="-fx-spacing: 0;" VBox.vgrow="ALWAYS">
                     <children>
-                        <ProgressBar fx:id="bottomProcessBar" focusTraversable="false" maxHeight="8.0" maxWidth="1.7976931348623157E308" minHeight="8.0" prefHeight="8.0" progress="0.0">
+                        <ProgressBar fx:id="bottomProcessBar" focusTraversable="false" maxHeight="10.0" maxWidth="1.7976931348623157E308" minHeight="10.0" prefHeight="10.0" progress="0.0">
                             <cursor>
                                 <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </ProgressBar>
-                        <TextField fx:id="status" editable="false" focusTraversable="false" maxHeight="27.0" minHeight="27.0" prefHeight="27.0" promptText="无" style="-fx-pref-width: 100%;" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="status" editable="false" focusTraversable="false" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" promptText="无" style="-fx-pref-width: 100%;" VBox.vgrow="ALWAYS">
                             <font>
                                 <Font size="12.0" />
                             </font>
