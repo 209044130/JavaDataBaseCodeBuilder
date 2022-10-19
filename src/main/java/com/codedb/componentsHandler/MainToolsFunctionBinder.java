@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
+import com.codedb.controller.AddTable;
 import com.codedb.controller.FrameMain;
 import com.codedb.model.HistoryItemData;
 import com.codedb.model.TableInfoData;
@@ -39,6 +40,8 @@ public class MainToolsFunctionBinder {
 			tab.setText("添加表(" + dbName + ")");
 			tab.setContent(p);
 			MainTabPaneHandle.addTab(tab);
+			AddTable addTable = loader.getController();
+			addTable.init(con);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

@@ -240,7 +240,6 @@ public class FrameMain {
 					case ToolsNodeData.REMOVE_DB :
 						MainToolsFunctionBinder.removeDB(con, cell.getDbName());
 						break;
-
 				}
 			}
 		});

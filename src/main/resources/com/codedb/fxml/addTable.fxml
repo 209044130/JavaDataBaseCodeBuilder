@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.codedb.controller.AddTable">
-   <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
-        <items>
-          <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddAction" text="新增字段" />
-            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteAction" text="删除字段" />
-        </items>
-      </ToolBar>
-      <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
-        <items>
-            <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="字段名" />
-                <TableColumn prefWidth="75.0" text="类型" />
-                  <TableColumn prefWidth="75.0" text="长度" />
-                  <TableColumn prefWidth="75.0" text="小数点" />
-                  <TableColumn prefWidth="75.0" text="非NULL" />
-                  <TableColumn prefWidth="75.0" text="主键" />
-                  <TableColumn prefWidth="75.0" text="注释" />
-              </columns>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codedb.controller.AddTable">
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <items>
+                <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddAction" text="新增字段" />
+                <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteAction" text="删除字段" />
+            <Button fx:id="btnShowSQL" mnemonicParsing="false" onAction="#btnShowSQLAction" text="查看SQL语句" />
+            <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#btnCreateAction" text="执行" />
+            </items>
+        </ToolBar>
+      <HBox alignment="CENTER_LEFT" VBox.vgrow="SOMETIMES">
+         <children>
+            <Label text="表名：">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="textTableName" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+        <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
+            <items>
+                <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                        <TableColumn fx:id="columnName" prefWidth="75.0" text="字段名" />
+                        <TableColumn fx:id="typeName" prefWidth="75.0" text="类型" />
+                        <TableColumn fx:id="charOctetLength" prefWidth="75.0" text="长度" />
+                        <TableColumn fx:id="numPrecRadix" prefWidth="75.0" text="小数点" />
+                        <TableColumn fx:id="isNullable" prefWidth="75.0" text="非NULL" />
+                        <TableColumn fx:id="isKey" prefWidth="75.0" text="键" />
+                        <TableColumn fx:id="remarks" prefWidth="75.0" text="注释" />
+                    </columns>
             </TableView>
             <TextArea fx:id="textPreviewSQL" prefHeight="200.0" prefWidth="200.0" />
         </items>

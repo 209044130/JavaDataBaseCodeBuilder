@@ -1,5 +1,11 @@
 package com.codedb.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TableColumn;
+import javafx.util.Callback;
+
 public class TableInfoData {
 	// 字段名称
 	private String columnName = "";
@@ -10,11 +16,59 @@ public class TableInfoData {
 	// 小数位数
 	private String numPrecRadix = "";
 	// 获取字段是否可以为空
-	private boolean isNullable = true;
+	private Boolean isNullable = true;
 	// 是否是主键
-	private boolean isKey = false;
+	private Boolean isKey = false;
 	// 获取表字段注解信息
 	private String remarks = "";
+
+	public String stringMapper(Integer index) {
+		return switch (index) {
+			case 1 -> columnName;
+			case 2 -> typeName;
+			case 3 -> charOctetLength;
+			case 4 -> numPrecRadix;
+			default -> remarks;
+		};
+	}
+
+	public Boolean booleanMapper(Integer index) {
+		return switch (index) {
+			case 1 -> isNullable;
+			default -> isKey;
+		};
+	}
+
+	public static Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>> getStringValueCell(
+			Integer index) {
+		Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>> callback = new Callback<TableColumn.CellDataFeatures<TableInfoData, String>, ObservableValue<String>>() {
+			@Override
+			public ObservableValue<String> call(
+					TableColumn.CellDataFeatures<TableInfoData, String> objectStringCellDataFeatures) {
+				ObservableValue<String> observableValue = new SimpleStringProperty(
+						objectStringCellDataFeatures.getValue().stringMapper(index));
+				return observableValue;
+			}
+		};
+		return callback;
+	}
+
+	public static Callback<TableColumn.CellDataFeatures<TableInfoData, Boolean>, ObservableValue<Boolean>> getBooleanValueCell(
+			Integer index) {
+		Callback<TableColumn.CellDataFeatures<TableInfoData, Boolean>, ObservableValue<Boolean>> callback = new Callback<TableColumn.CellDataFeatures<TableInfoData, Boolean>, ObservableValue<Boolean>>() {
+			@Override
+			public ObservableValue<Boolean> call(
+					TableColumn.CellDataFeatures<TableInfoData, Boolean> tableInfoDataBooleanCellDataFeatures) {
+				ObservableValue<Boolean> observableValue = new SimpleBooleanProperty(
+						tableInfoDataBooleanCellDataFeatures.getValue().booleanMapper(index));
+				return observableValue;
+			}
+		};
+		return callback;
+	}
+
+	public TableInfoData() {
+	}
 
 	public TableInfoData(String columnName, String typeName, String charOctetLength, String numPrecRadix,
 			boolean isNullable, boolean isKey, String remarks) {
