@@ -2,11 +2,9 @@ package com.codedb.application;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.LinkedList;
-import java.util.List;
 
+import com.codedb.componentsHandler.MainTabPaneHandle;
 import com.codedb.controller.FrameMain;
-import com.codedb.utils.DBTools;
 import com.codedb.utils.FrameManager;
 
 import javafx.fxml.FXMLLoader;
@@ -56,12 +54,7 @@ public class MainApplication {
 	 * @Return
 	 **/
 	private void initDBTreeView() {
-		List<String> list = new LinkedList<>();
-		try {
-			list = DBTools.getDatabasesName(this.connection);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		frameMain.init(list);
+		frameMain.refreshTreeView();
+		MainTabPaneHandle.createHelloTab();
 	}
 }

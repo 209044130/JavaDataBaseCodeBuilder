@@ -41,7 +41,7 @@ public class MainToolsFunctionBinder {
 			tab.setContent(p);
 			MainTabPaneHandle.addTab(tab);
 			AddTable addTable = loader.getController();
-			addTable.init(con);
+			addTable.init(con, dbName);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -54,19 +54,13 @@ public class MainToolsFunctionBinder {
 		String error = "";
 		try {
 			PreparedStatement preparedStatement = con.prepareStatement("DROP DATABASE " + dbName + ";");
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除吗？");
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除数据库<" + dbName + ">吗？");
 			MainProgressHandle.set(0.5);
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK) {
 				preparedStatement.execute();
-				List<String> list = new LinkedList<>();
-				try {
-					list = DBTools.getDatabasesName(con);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				FrameMain parent = (FrameMain) FrameManager.getController("FrameMain");
-				parent.init(list);
+				parent.refreshTreeView();
 				MainHistoryHandle.add("删除数据库<" + dbName + ">成功", HistoryItemData.SUCCESS);
 			}
 		} catch (SQLException e) {
@@ -251,6 +245,38 @@ public class MainToolsFunctionBinder {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// 删除选中的表
+	public static void removeTable(Connection con, String dbName, String tableName) {
+		// 保存错误信息，以及确认是否报错.
+		MainProgressHandle.set(0);
+		String error = "";
+		try {
+			// 切换到数据库
+			PreparedStatement preparedStatement0 = con.prepareStatement("USE " + dbName + ";");
+			preparedStatement0.execute();
+			PreparedStatement preparedStatement = con.prepareStatement("DROP TABLE " + tableName + ";");
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除表<" + tableName + ">吗？");
+			MainProgressHandle.set(0.5);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				preparedStatement.execute();
+				FrameMain parent = (FrameMain) FrameManager.getController("FrameMain");
+				parent.refreshTreeView();
+				MainHistoryHandle.add("删除表<" + tableName + ">成功", HistoryItemData.SUCCESS);
+			}
+		} catch (SQLException e) {
+			error = e.getMessage();
+		}
+		if (!error.equals("")) {
+			// 添加到历史记录
+			MainHistoryHandle.add("删除表<" + tableName + ">失败", HistoryItemData.ERROR);
+			// 显示异常信息
+			Alert alert = new Alert(Alert.AlertType.ERROR, error);
+			alert.show();
+		}
+		MainProgressHandle.set(1);
 	}
 
 }

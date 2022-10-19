@@ -87,6 +87,16 @@ public class FrameMain {
 		this.con = con;
 	}
 
+	public void refreshTreeView() {
+		List<String> list = new LinkedList<>();
+		try {
+			list = DBTools.getDatabasesName(con);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		init(list);
+	}
+
 	/**
 	 * @Description 初始化
 	 * @Params [list：数据库名称列表]
@@ -172,8 +182,6 @@ public class FrameMain {
 				initInfoAndTools(item.getValue());
 			}
 		});
-		// 打开介绍页
-		MainTabPaneHandle.createHelloTab();
 		MainStatusHandle.set("准备就绪!", MainStatusHandle.SUCCESS);
 	}
 
@@ -278,6 +286,7 @@ public class FrameMain {
 		leftToolListView.getItems().add(new ToolsNodeData("从页面到数据库", ToolsNodeData.TEXT_TO_DB, dbName, title));
 		leftToolListView.getItems().add(new ToolsNodeData("从数据库到数据集", ToolsNodeData.DB_TO_RESULTSET, dbName, title));
 		leftToolListView.getItems().add(new ToolsNodeData("从数据集到页面", ToolsNodeData.RESULTSET_TO_TEXT, dbName, title));
+		leftToolListView.getItems().add(new ToolsNodeData("删除表", ToolsNodeData.REMOVE_TABLE, dbName, title));
 		// 绑定工具栏点击事件
 		leftToolListView.setOnMouseClicked(mouseEvent -> {
 			ToolsNodeData cell = leftToolListView.getSelectionModel().getSelectedItem();
@@ -310,6 +319,9 @@ public class FrameMain {
 					case ToolsNodeData.RESULTSET_TO_TEXT :
 						MainToolsFunctionBinder.resultSetToFrame(con, cell.getDbName(), cell.getTableName(),
 								menuShowAnnotation.isSelected(), menuUseIndex.isSelected());
+						break;
+					case ToolsNodeData.REMOVE_TABLE :
+						MainToolsFunctionBinder.removeTable(con, cell.getDbName(), cell.getTableName());
 						break;
 				}
 			}

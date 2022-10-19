@@ -12,6 +12,7 @@ public class ToolsNodeData
 	public static final int TEXT_TO_DB = 103;
 	public static final int DB_TO_RESULTSET = 104;
 	public static final int RESULTSET_TO_TEXT = 105;
+	public static final int REMOVE_TABLE = 110;
 
     private String name = "";
 	private Integer type = 0;
