@@ -12,7 +12,7 @@
     <children>
         <VBox alignment="CENTER" minHeight="400.0" minWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <SplitPane fx:id="topPane" maxHeight="-Infinity" orientation="VERTICAL" prefWidth="160.0" VBox.vgrow="ALWAYS">
+                <SplitPane fx:id="topPane" maxHeight="-Infinity" orientation="VERTICAL" prefWidth="160.0" VBox.vgrow="NEVER">
                     <items>
                         <MenuBar fx:id="menuBar">
                             <menus>
@@ -75,7 +75,7 @@
                   </VBox>
                     </items>
                 </SplitPane>
-                <VBox alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" style="-fx-spacing: 0;" VBox.vgrow="ALWAYS">
+                <VBox alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" style="-fx-spacing: 0;" VBox.vgrow="NEVER">
                     <children>
                         <ProgressBar fx:id="bottomProcessBar" focusTraversable="false" maxHeight="10.0" maxWidth="1.7976931348623157E308" minHeight="10.0" prefHeight="10.0" progress="0.0">
                             <cursor>

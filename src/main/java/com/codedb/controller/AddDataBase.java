@@ -22,7 +22,7 @@ public class AddDataBase
         FrameMain parent = (FrameMain) FrameManager.getController("FrameMain");
         if (parent != null)
         {
-            String error = parent.handleAddDataBaseFrame(dbName);
+			String error = parent.callBack.handleAddDataBaseFrame(dbName);
             if(error.equals("") )
             {
                 FrameManager.closeFrame("AddDataBase");

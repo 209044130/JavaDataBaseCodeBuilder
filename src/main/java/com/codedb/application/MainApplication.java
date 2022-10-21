@@ -10,10 +10,13 @@ import com.codedb.utils.FrameManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class MainApplication {
+	// 保存连接类
 	public Connection connection = null;
+	// 保存主页面控制类
 	public FrameMain frameMain = null;
 
 	// 获得connection对象，启动主界面
@@ -23,38 +26,36 @@ public class MainApplication {
 		}
 		connection = con;
 		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/com/codedb/fxml/frameMain.fxml"));
-		Parent p = null;
 		try {
 			// 加载并且保存控制类
-			p = loader.load();
+			Parent p = loader.load();
 			frameMain = loader.getController();
+			Scene scene = new Scene(p);
+			// 加载css文件
+			scene.getStylesheets().add(getClass().getResource("/com/codedb/css/main.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			init();
+			stage.show();
+			FrameManager.setFrame("FrameMain", loader.getController(), stage);
 		} catch (IOException e) {
 			e.printStackTrace();
+			Alert alert = new Alert(Alert.AlertType.ERROR, "主界面加载失败,可能是文件损坏,请尝试重新安装。");
+			alert.show();
 		}
-		Scene scene = new Scene(p);
-		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
-		Stage stage = new Stage();
-		stage.setScene(scene);
-		init();
-		stage.show();
-		FrameManager.setFrame("FrameMain", loader.getController(), stage);
 	}
 
 	/**
 	 * @Description 初始化
 	 */
 	public void init() {
+		// 控制类保存连接类
 		frameMain.setCon(connection);
-		initDBTreeView();
-	}
-
-	/**
-	 * @Description 初始化
-	 * @Params []
-	 * @Return
-	 **/
-	private void initDBTreeView() {
-		frameMain.refreshTreeView();
+		// 控制类界面数据初始化
+		frameMain.init();
+		// 显示欢迎介绍页面
 		MainTabPaneHandle.createHelloTab();
 	}
+
+
 }

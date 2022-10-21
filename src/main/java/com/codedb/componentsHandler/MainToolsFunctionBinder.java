@@ -60,7 +60,7 @@ public class MainToolsFunctionBinder {
 			if (result.get() == ButtonType.OK) {
 				preparedStatement.execute();
 				FrameMain parent = (FrameMain) FrameManager.getController("FrameMain");
-				parent.refreshTreeView();
+				parent.initLeftTreeView();
 				MainHistoryHandle.add("删除数据库<" + dbName + ">成功", HistoryItemData.SUCCESS);
 			}
 		} catch (SQLException e) {
@@ -263,7 +263,7 @@ public class MainToolsFunctionBinder {
 			if (result.get() == ButtonType.OK) {
 				preparedStatement.execute();
 				FrameMain parent = (FrameMain) FrameManager.getController("FrameMain");
-				parent.refreshTreeView();
+				parent.initLeftTreeView();
 				MainHistoryHandle.add("删除表<" + tableName + ">成功", HistoryItemData.SUCCESS);
 			}
 		} catch (SQLException e) {

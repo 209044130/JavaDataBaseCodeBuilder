@@ -170,7 +170,7 @@ public class AddTable {
 			preparedStatement2.execute();
 			// 刷新表
 			FrameMain frameMain = (FrameMain) FrameManager.getController("FrameMain");
-			frameMain.refreshTreeView();
+			frameMain.initLeftTreeView();
 		} catch (SQLException e) {
 			Alert alert = new Alert(Alert.AlertType.WARNING, e.getMessage());
 			alert.show();

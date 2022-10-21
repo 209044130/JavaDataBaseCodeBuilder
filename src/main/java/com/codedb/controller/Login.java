@@ -46,6 +46,8 @@ public class Login {
 		statusText.setText("");
 		con = null;
 		try {
+			userNameText = "root";
+			passWordText = "cz2002610";
 			con = DBTools.connectToDB(userNameText, passWordText);
 			FrameManager.closeFrame("Login");
 			MainApplication mainApplication = new MainApplication();
