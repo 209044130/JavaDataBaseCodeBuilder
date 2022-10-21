@@ -12,6 +12,9 @@ public class StaticImage {
 	public static Image function = new Image(StaticImage.class.getResourceAsStream("/com/codedb/img/function.png"), 16,
 			16, true, true);
 
+	public static Image createCode = new Image(StaticImage.class.getResourceAsStream("/com/codedb/img/createCode.png"),
+			16, 16, true, true);
+
 	public static Image info = new Image(StaticImage.class.getResourceAsStream("/com/codedb/img/info.png"), 16, 16,
 			true, true);
 

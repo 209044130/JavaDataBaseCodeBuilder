@@ -30,7 +30,7 @@ public class ListViewImageCellFactory
                     case ToolsNodeData.REMOVE_DB,ToolsNodeData.REMOVE_TABLE ->  image = StaticImage.delete;
                     case ToolsNodeData.TABLE_NAME ->  image = StaticImage.table;
                     case ToolsNodeData.SHOW_TABLE_STRUCTURE ->  image = StaticImage.info;
-                    case ToolsNodeData.DB_TO_RESULTSET, ToolsNodeData.RESULTSET_TO_DB, ToolsNodeData.RESULTSET_TO_TEXT, ToolsNodeData.TEXT_TO_DB ->  image = StaticImage.function;
+					case ToolsNodeData.DB_TO_RESULTSET, ToolsNodeData.RESULTSET_TO_DB, ToolsNodeData.RESULTSET_TO_TEXT, ToolsNodeData.TEXT_TO_DB -> image = StaticImage.createCode;
                 }
                 hBox.getChildren().add(new ImageView(image));
                 this.setFont(new Font(14));
