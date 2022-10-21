@@ -19,7 +19,9 @@ public class MainApplication {
 	// 保存主页面控制类
 	public FrameMain frameMain = null;
 
-	// 获得connection对象，启动主界面
+	/**
+	 * @Description 启动主界面
+	 **/
 	public void start(Connection con) {
 		if (con == null) {
 			return;
@@ -32,7 +34,7 @@ public class MainApplication {
 			frameMain = loader.getController();
 			Scene scene = new Scene(p);
 			// 加载css文件
-			scene.getStylesheets().add(getClass().getResource("/com/codedb/css/main.css").toExternalForm());
+			// scene.getStylesheets().add(getClass().getResource("/com/codedb/css/main.css").toExternalForm());
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			init();

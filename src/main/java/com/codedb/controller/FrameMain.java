@@ -274,6 +274,9 @@ public class FrameMain {
 
 	}
 
+	/**
+	 * @Description 创建数据库
+	 **/
 	public void menuCreateDataBaseAction(ActionEvent actionEvent) {
 		Stage stage = new Stage();
 		stage.setTitle("创建数据库");

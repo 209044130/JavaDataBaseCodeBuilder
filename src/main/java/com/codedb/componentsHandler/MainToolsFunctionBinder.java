@@ -26,12 +26,17 @@ import javafx.scene.control.Tab;
  * @Description Tools功能绑定
  **/
 public class MainToolsFunctionBinder {
-	// 点击数据库名称
+
+	/**
+	 * @Description 点击数据库名
+	 **/
 	public static void dbName(String dbName) {
 		MainStatusHandle.set("选中数据库 " + dbName);
 	}
 
-	// 创建表
+	/**
+	 * @Description 创建表
+	 **/
 	public static void addTable(Connection con, String dbName) {
 		FXMLLoader loader = new FXMLLoader(MainToolsFunctionBinder.class.getResource("/com/codedb/fxml/addTable.fxml"));
 		try {
@@ -47,7 +52,10 @@ public class MainToolsFunctionBinder {
 		}
 	}
 
-	// 删除数据库
+	/**
+	 * @Description 删除数据库
+	 * @Params [con 连接类, dbName 数据库名]
+	 **/
 	public static void removeDB(Connection con, String dbName) {
 		// 保存错误信息，以及确认是否报错.
 		MainProgressHandle.set(0);
@@ -76,12 +84,18 @@ public class MainToolsFunctionBinder {
 		MainProgressHandle.set(1);
 	}
 
-	// 点击表名
+	/**
+	 * @Description 点击表名
+	 * @Params [tableName 表名]
+	 **/
 	public static void tableName(String tableName) {
 		MainStatusHandle.set("选中表 " + tableName);
 	}
 
-	// 显示表信息
+	/**
+	 * @Description 显示表结构信息
+	 * @Params [con 连接类, parentTitle 数据库名, title 表名]
+	 **/
 	public static void showTableInfo(Connection con, String parentTitle, String title) {
 		MainTabPaneHandle.showTableInfo(con, parentTitle, title);
 		MainHistoryHandle.add("显示" + title + "(" + parentTitle + ")结构");
@@ -247,7 +261,10 @@ public class MainToolsFunctionBinder {
 		}
 	}
 
-	// 删除选中的表
+	/**
+	 * @Description 删除表
+	 * @Params [con 连接类, dbName 数据库名, tableName 表名]
+	 **/
 	public static void removeTable(Connection con, String dbName, String tableName) {
 		// 保存错误信息，以及确认是否报错.
 		MainProgressHandle.set(0);
