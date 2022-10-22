@@ -11,8 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bfd1c98d-7909-415e-b9e9-f12e34eda7fc" name="变更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/componentsHandler/MainTabPaneHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/componentsHandler/MainTabPaneHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/controller/FrameMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/controller/FrameMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/controller/AddSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/controller/AddSearch.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +191,7 @@
       <workItem from="1666361299597" duration="229000" />
       <workItem from="1666361542626" duration="199000" />
       <workItem from="1666361756306" duration="7472000" />
-      <workItem from="1666397207858" duration="5624000" />
+      <workItem from="1666397207858" duration="8136000" />
     </task>
     <servers />
   </component>

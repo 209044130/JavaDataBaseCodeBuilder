@@ -116,7 +116,7 @@ public class AddSearch {
 					? "一共有" + rowCount + "条结果，只显示前" + maxSearchRows + "条\n"
 					: "一共有" + rowCount + "条结果\n");
 			for (Map<Integer, Object> line : list) {
-				res.append(line.toString());
+				res.append(line.values().toString());
 				res.append("\n");
 			}
 			textResult.setText(res.toString());
@@ -141,9 +141,11 @@ public class AddSearch {
 		ResultSetMetaData rsmd = resultSet.getMetaData();
 		int columnCount = rsmd.getColumnCount();
 		Map<Integer, Object> rowData = new HashMap<Integer, Object>();
+		// 将字段名放入结果返回
 		for (int i = 0; i < columnCount; i++) {
 			rowData.put(i + 1, rsmd.getColumnName(i + 1));
 		}
+		// 将每个字段的结果返回
 		data.add(rowData);
 		int count = 0;
 		while (resultSet.next()) {
