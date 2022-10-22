@@ -10,35 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bfd1c98d-7909-415e-b9e9-f12e34eda7fc" name="变更" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/CodeDB_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/chenzhen.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/eclipseCodeFormatter.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/google-java-format.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/saveactions_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/application/LoginApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/application/LoginApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/application/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/application/MainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/componentsHandler/MainTabPaneHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/componentsHandler/MainTabPaneHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/componentsHandler/MainToolsFunctionBinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/componentsHandler/MainToolsFunctionBinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/controller/AddTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/controller/AddTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/controller/FrameMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/controller/FrameMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/controller/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/controller/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/model/StaticImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/model/StaticImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/model/ToolsNodeData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/model/ToolsNodeData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/utils/DBTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/utils/DBTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/utils/ListViewImageCellFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/utils/ListViewImageCellFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codedb/utils/TreeTableImageCellFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codedb/utils/TreeTableImageCellFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/codedb/fxml/frameMain.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/codedb/fxml/frameMain.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +80,7 @@
     "project.structure.last.edited": "工件",
     "project.structure.proportion": "0.14648438",
     "project.structure.side.proportion": "0.44558993",
-    "settings.editor.selected.configurable": "settings.saveactions"
+    "settings.editor.selected.configurable": "preferences.keymap"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -218,7 +192,7 @@
       <workItem from="1666361299597" duration="229000" />
       <workItem from="1666361542626" duration="199000" />
       <workItem from="1666361756306" duration="7472000" />
-      <workItem from="1666397207858" duration="4944000" />
+      <workItem from="1666397207858" duration="5624000" />
     </task>
     <servers />
   </component>

@@ -172,16 +172,14 @@ public class MainTabPaneHandle {
 	public static void addSearchTab(Tab tab, ManagedConnection mcon) {
 		String title = addTab(tab);
 		DBSearchUUID.put(title, mcon.uuid);
-		//添加点击事件释放连接池资源
-		tab.setOnClosed(new EventHandler<Event>()
-		{
+		// 添加点击事件释放连接池资源
+		tab.setOnClosed(new EventHandler<Event>() {
 			@Override
-			public void handle(Event event)
-			{
+			public void handle(Event event) {
 				UUID uuid = DBSearchUUID.get(title);
 				DBSearchUUID.remove(title);
 				DBTools.connectionPool.close(uuid);
-				MainHistoryHandle.add("关闭查询" + tab.getText(),HistoryItemData.WARNING);
+				MainHistoryHandle.add("关闭查询" + tab.getText(), HistoryItemData.WARNING);
 				MainStatusHandle.set("当前连接池状态：空闲（" + DBTools.connectionPool.getIdleStateCount() + "）" + "已连接（"
 						+ DBTools.connectionPool.getBuzyStateCount() + "）", MainStatusHandle.WARNING);
 			}
@@ -221,12 +219,4 @@ public class MainTabPaneHandle {
 		MainHistoryHandle.add("关闭所有代码生成结果页签", HistoryItemData.WARNING);
 	}
 
-	// 检查是否存在使用了数据库连接池资源的页签
-	public static void checkIsDBSearch(String title) {
-		if (title.contains("查询")) {
-			String dbName = title.split("\\(")[1];
-			dbName = dbName.split("\\)")[0];
-
-		}
-	}
 }

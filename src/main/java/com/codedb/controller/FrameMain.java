@@ -75,6 +75,9 @@ public class FrameMain {
 	private MenuItem menuCreateDataBase, menuCloseAllTab, menuCloseAllStructureTab, menuCloseAllResultTab, menuHello,
 			menuClearHistory;
 
+	/**
+	 * @Description 注册回调函数，用户创建的界面回调返回数据
+	 **/
 	public CallBack callBack = new CallBack();
 
 	/**
@@ -291,8 +294,10 @@ public class FrameMain {
 		FrameManager.setFrame("AddDataBase", fxmlLoader.getController(), stage);
 	}
 
-	public void menuCreateDataBasemenuRefreshDataBase(ActionEvent actionEvent)
-	{
+	/**
+	 * @Description 刷新数据库
+	 **/
+	public void menuCreateDataBasemenuRefreshDataBase(ActionEvent actionEvent) {
 		initLeftTreeView();
 	}
 
@@ -346,7 +351,6 @@ public class FrameMain {
 			leftVBox.setVisible(false);
 		}
 	}
-
 
 	/**
 	 * @Description 回调
