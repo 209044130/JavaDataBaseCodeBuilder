@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1200.0"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.codedb.controller.FrameMain"
-            stylesheets="@../css/main.css">
+
+<AnchorPane minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codedb.controller.FrameMain">
     <children>
-        <VBox alignment="CENTER" minHeight="400.0" minWidth="600.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox alignment="CENTER" minHeight="400.0" minWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <SplitPane fx:id="topPane" maxHeight="-Infinity" orientation="VERTICAL" prefWidth="160.0"
-                           VBox.vgrow="NEVER">
+                <SplitPane fx:id="topPane" maxHeight="-Infinity" orientation="VERTICAL" prefWidth="160.0" VBox.vgrow="NEVER">
                     <items>
                         <MenuBar fx:id="menuBar">
                             <menus>
                                 <Menu mnemonicParsing="false" text="数据库">
                                     <items>
-                                        <MenuItem fx:id="menuCreateDataBase" mnemonicParsing="false"
-                                                  onAction="#menuCreateDataBaseAction" text="创建数据库"/>
+                                        <MenuItem fx:id="menuCreateDataBase" mnemonicParsing="false" onAction="#menuCreateDataBaseAction" text="创建数据库" />
+                              <MenuItem fx:id="menuRefreshDataBase" mnemonicParsing="false" onAction="#menuCreateDataBasemenuRefreshDataBase" text="刷新" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="编辑">

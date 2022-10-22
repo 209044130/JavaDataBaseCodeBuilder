@@ -1,11 +1,11 @@
 package com.codedb.application;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 import com.codedb.componentsHandler.MainTabPaneHandle;
 import com.codedb.controller.FrameMain;
 import com.codedb.utils.FrameManager;
+import com.codedb.utils.ManagedConnection;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,14 +15,14 @@ import javafx.stage.Stage;
 
 public class MainApplication {
 	// 保存连接类
-	public Connection connection = null;
+	public ManagedConnection connection = null;
 	// 保存主页面控制类
 	public FrameMain frameMain = null;
 
 	/**
 	 * @Description 启动主界面
 	 **/
-	public void start(Connection con) {
+	public void start(ManagedConnection con) {
 		if (con == null) {
 			return;
 		}
@@ -33,8 +33,6 @@ public class MainApplication {
 			Parent p = loader.load();
 			frameMain = loader.getController();
 			Scene scene = new Scene(p);
-			// 加载css文件
-			// scene.getStylesheets().add(getClass().getResource("/com/codedb/css/main.css").toExternalForm());
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			init();
@@ -58,6 +56,4 @@ public class MainApplication {
 		// 显示欢迎介绍页面
 		MainTabPaneHandle.createHelloTab();
 	}
-
-
 }

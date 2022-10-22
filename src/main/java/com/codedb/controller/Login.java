@@ -1,20 +1,21 @@
 package com.codedb.controller;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.codedb.application.MainApplication;
 import com.codedb.utils.DBTools;
 import com.codedb.utils.FrameManager;
+import com.codedb.utils.ManagedConnection;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 public class Login {
-	public static Connection con = null;
+	public static ManagedConnection con = null;
 
 	@FXML
 	private Label statusText;
@@ -48,14 +49,16 @@ public class Login {
 		try {
 			userNameText = "root";
 			passWordText = "cz2002610";
-			con = DBTools.connectToDB(userNameText, passWordText);
+			con = DBTools.init(userNameText, passWordText);
+			if (con == null) {
+				Alert alert = new Alert(Alert.AlertType.ERROR, "连接池初始化失败");
+				return;
+			}
 			FrameManager.closeFrame("Login");
 			MainApplication mainApplication = new MainApplication();
 			mainApplication.start(con);
 		} catch (SQLException ex) {
 			statusText.setText(ex.getMessage());
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
 		}
 	}
 }

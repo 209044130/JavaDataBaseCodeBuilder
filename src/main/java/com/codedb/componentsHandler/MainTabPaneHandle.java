@@ -1,24 +1,27 @@
 package com.codedb.componentsHandler;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.codedb.model.HistoryItemData;
 import com.codedb.model.TableInfoData;
+import com.codedb.utils.ConnectionPool;
 import com.codedb.utils.DBTools;
+import com.codedb.utils.ManagedConnection;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.VBox;
 
 public class MainTabPaneHandle {
 	public static TabPane tabPane;
+
+	public static Map<String, UUID> DBSearchUUID = new HashMap<>();
 
 	public static void register(TabPane tp) {
 		tabPane = tp;
@@ -28,7 +31,7 @@ public class MainTabPaneHandle {
 	 * @Description 显示表的结构信息
 	 * @Params [parentTitle 父节点（数据库）名称, title 表名]
 	 **/
-	public static void showTableInfo(Connection con, String parentTitle, String title) {
+	public static void showTableInfo(ManagedConnection con, String parentTitle, String title) {
 		String tabName = title + "(" + parentTitle + ") 结构";
 		// 检查当前是否已经有该标签
 		for (Tab temp : tabPane.getTabs()) {
@@ -140,7 +143,10 @@ public class MainTabPaneHandle {
 		tabPane.getSelectionModel().select(tab);
 	}
 
-	public static void addTab(Tab tab) {
+	/**
+	 * @Description 添加一般tab
+	 **/
+	public static String addTab(Tab tab) {
 		// 防止出现重名
 		String finalText = tab.getText();
 		String preText = tab.getText();
@@ -156,6 +162,30 @@ public class MainTabPaneHandle {
 		tab.setText(finalText);
 		tabPane.getTabs().add(tab);
 		tabPane.getSelectionModel().select(tab);
+		return finalText;
+	}
+
+	/**
+	 * @Description 添加具有连接池资源的tab
+	 * @Params [tab, mcon]
+	 **/
+	public static void addSearchTab(Tab tab, ManagedConnection mcon) {
+		String title = addTab(tab);
+		DBSearchUUID.put(title, mcon.uuid);
+		//添加点击事件释放连接池资源
+		tab.setOnClosed(new EventHandler<Event>()
+		{
+			@Override
+			public void handle(Event event)
+			{
+				UUID uuid = DBSearchUUID.get(title);
+				DBSearchUUID.remove(title);
+				DBTools.connectionPool.close(uuid);
+				MainHistoryHandle.add("关闭查询" + tab.getText(),HistoryItemData.WARNING);
+				MainStatusHandle.set("当前连接池状态：空闲（" + DBTools.connectionPool.getIdleStateCount() + "）" + "已连接（"
+						+ DBTools.connectionPool.getBuzyStateCount() + "）", MainStatusHandle.WARNING);
+			}
+		});
 	}
 
 	// 清除所有页签
@@ -164,6 +194,7 @@ public class MainTabPaneHandle {
 		MainHistoryHandle.add("关闭所有页签", HistoryItemData.WARNING);
 	}
 
+	// 清除所有表结构页签
 	public static void clearAllStructureTab() {
 		List<Tab> tempTab = new LinkedList<>();
 		for (Tab temp : tabPane.getTabs()) {
@@ -176,6 +207,7 @@ public class MainTabPaneHandle {
 		MainHistoryHandle.add("关闭所有表结构页签", HistoryItemData.WARNING);
 	}
 
+	// 清除所有查询结果页签
 	public static void clearAllResultTab() {
 		List<Tab> tempTab = new LinkedList<>();
 		for (Tab temp : tabPane.getTabs()) {
@@ -187,5 +219,14 @@ public class MainTabPaneHandle {
 			tabPane.getTabs().remove(i);
 		}
 		MainHistoryHandle.add("关闭所有代码生成结果页签", HistoryItemData.WARNING);
+	}
+
+	// 检查是否存在使用了数据库连接池资源的页签
+	public static void checkIsDBSearch(String title) {
+		if (title.contains("查询")) {
+			String dbName = title.split("\\(")[1];
+			dbName = dbName.split("\\)")[0];
+
+		}
 	}
 }

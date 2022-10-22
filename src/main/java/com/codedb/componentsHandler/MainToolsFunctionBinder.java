@@ -1,7 +1,6 @@
 package com.codedb.componentsHandler;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -9,12 +8,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
+import com.codedb.controller.AddSearch;
 import com.codedb.controller.AddTable;
 import com.codedb.controller.FrameMain;
+import com.codedb.exception.ConnectionPoolBuzy;
 import com.codedb.model.HistoryItemData;
 import com.codedb.model.TableInfoData;
 import com.codedb.utils.DBTools;
 import com.codedb.utils.FrameManager;
+import com.codedb.utils.ManagedConnection;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,18 +37,46 @@ public class MainToolsFunctionBinder {
 	}
 
 	/**
+	 * @Description 新增查询
+	 * @Params [con 连接类, dbName 数据库名称]
+	 **/
+	public static void addSearch(String dbName) {
+		FXMLLoader loader = new FXMLLoader(
+				MainToolsFunctionBinder.class.getResource("/com/codedb/fxml/addSearch.fxml"));
+		try {
+			Parent p = loader.load();
+			Tab tab = new Tab();
+			tab.setText("查询(" + dbName + ")");
+			tab.setContent(p);
+			AddSearch addSearch = loader.getController();
+			ManagedConnection mcon = addSearch.init(dbName);
+			MainTabPaneHandle.addSearchTab(tab, mcon);
+			MainHistoryHandle.add("添加查询" + tab.getText(),HistoryItemData.SUCCESS);
+			MainStatusHandle.set("当前连接池状态：空闲（" + DBTools.connectionPool.getIdleStateCount() + "）" + "已连接（"
+					+ DBTools.connectionPool.getBuzyStateCount() + "）", MainStatusHandle.WARNING);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (ConnectionPoolBuzy e) {
+			Alert alert = new Alert(Alert.AlertType.WARNING, "已达最大数据库连接负载上限，不能再继续创建查询");
+			alert.show();
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
 	 * @Description 创建表
 	 **/
-	public static void addTable(Connection con, String dbName) {
+	public static void addTable(ManagedConnection mcon, String dbName) {
 		FXMLLoader loader = new FXMLLoader(MainToolsFunctionBinder.class.getResource("/com/codedb/fxml/addTable.fxml"));
 		try {
 			Parent p = loader.load();
 			Tab tab = new Tab();
 			tab.setText("添加表(" + dbName + ")");
 			tab.setContent(p);
-			MainTabPaneHandle.addTab(tab);
 			AddTable addTable = loader.getController();
-			addTable.init(con, dbName);
+			addTable.init(mcon, dbName);
+			MainTabPaneHandle.addTab(tab);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -56,12 +86,12 @@ public class MainToolsFunctionBinder {
 	 * @Description 删除数据库
 	 * @Params [con 连接类, dbName 数据库名]
 	 **/
-	public static void removeDB(Connection con, String dbName) {
+	public static void removeDB(ManagedConnection mcon, String dbName) {
 		// 保存错误信息，以及确认是否报错.
 		MainProgressHandle.set(0);
 		String error = "";
 		try {
-			PreparedStatement preparedStatement = con.prepareStatement("DROP DATABASE " + dbName + ";");
+			PreparedStatement preparedStatement = mcon.con.prepareStatement("DROP DATABASE " + dbName + ";");
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除数据库<" + dbName + ">吗？");
 			MainProgressHandle.set(0.5);
 			Optional<ButtonType> result = alert.showAndWait();
@@ -96,8 +126,8 @@ public class MainToolsFunctionBinder {
 	 * @Description 显示表结构信息
 	 * @Params [con 连接类, parentTitle 数据库名, title 表名]
 	 **/
-	public static void showTableInfo(Connection con, String parentTitle, String title) {
-		MainTabPaneHandle.showTableInfo(con, parentTitle, title);
+	public static void showTableInfo(ManagedConnection mcon, String parentTitle, String title) {
+		MainTabPaneHandle.showTableInfo(mcon, parentTitle, title);
 		MainHistoryHandle.add("显示" + title + "(" + parentTitle + ")结构");
 	}
 
@@ -106,10 +136,10 @@ public class MainToolsFunctionBinder {
 	 * @Params [con:连接connection, dbName:数据库名称, tableName:表名, showAnnotation:显示注释,
 	 *         useIndex:使用下标]
 	 **/
-	public static void resultSetToDB(Connection con, String dbName, String tableName, boolean showAnnotation,
+	public static void resultSetToDB(ManagedConnection mcon, String dbName, String tableName, boolean showAnnotation,
 			boolean useIndex) {
 		try {
-			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(mcon, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			// 根据参数处理sql2语句的代码模板
@@ -166,9 +196,9 @@ public class MainToolsFunctionBinder {
 	 * @Description 从页面text输入框读入数据并且存入数据库 代码生成
 	 * @Params [con:~, dbName:~, tableName:~, showAnnotation:~, useIndex:~]
 	 **/
-	public static void frameToDB(Connection con, String dbName, String tableName, boolean showAnnotation) {
+	public static void frameToDB(ManagedConnection mcon, String dbName, String tableName, boolean showAnnotation) {
 		try {
-			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(mcon, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			// 根据参数处理sql1语句的代码模板
@@ -209,9 +239,9 @@ public class MainToolsFunctionBinder {
 	 * @Description 从数据库获取数据到resultset
 	 * @Params [con, dbName, tableName, showAnnotation]
 	 **/
-	public static void dbToResultSet(Connection con, String dbName, String tableName, boolean showAnnotation) {
+	public static void dbToResultSet(ManagedConnection mcon, String dbName, String tableName, boolean showAnnotation) {
 		try {
-			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(mcon, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			// 根据参数处理sql1语句的代码模板
@@ -235,10 +265,10 @@ public class MainToolsFunctionBinder {
 	 * @Description 从数据集到页面 代码生成
 	 * @Params [con, dbName, tableName, showAnnotation]
 	 **/
-	public static void resultSetToFrame(Connection con, String dbName, String tableName, boolean showAnnotation,
+	public static void resultSetToFrame(ManagedConnection mcon, String dbName, String tableName, boolean showAnnotation,
 			boolean useIndex) {
 		try {
-			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(con, dbName, tableName);
+			ConcurrentMap<String, TableInfoData> fields = DBTools.getTableStructure(mcon, dbName, tableName);
 			// 处理参数
 			List<String> params = new LinkedList<>(fields.keySet());
 			String res = "";
@@ -265,15 +295,15 @@ public class MainToolsFunctionBinder {
 	 * @Description 删除表
 	 * @Params [con 连接类, dbName 数据库名, tableName 表名]
 	 **/
-	public static void removeTable(Connection con, String dbName, String tableName) {
+	public static void removeTable(ManagedConnection mcon, String dbName, String tableName) {
 		// 保存错误信息，以及确认是否报错.
 		MainProgressHandle.set(0);
 		String error = "";
 		try {
 			// 切换到数据库
-			PreparedStatement preparedStatement0 = con.prepareStatement("USE " + dbName + ";");
+			PreparedStatement preparedStatement0 = mcon.con.prepareStatement("USE " + dbName + ";");
 			preparedStatement0.execute();
-			PreparedStatement preparedStatement = con.prepareStatement("DROP TABLE " + tableName + ";");
+			PreparedStatement preparedStatement = mcon.con.prepareStatement("DROP TABLE " + tableName + ";");
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除表<" + tableName + ">吗？");
 			MainProgressHandle.set(0.5);
 			Optional<ButtonType> result = alert.showAndWait();

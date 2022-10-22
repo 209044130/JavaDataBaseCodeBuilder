@@ -3,7 +3,8 @@ package com.codedb.model;
 public class ToolsNodeData
 {
 	public static final int DB_NAME = 0;
-	public static final int ADD_TABLE = 1;
+	public static final int ADD_SEARCH = 1;
+	public static final int ADD_TABLE = 2;
 	public static final int REMOVE_DB = 10;
 
 	public static final int TABLE_NAME = 100;

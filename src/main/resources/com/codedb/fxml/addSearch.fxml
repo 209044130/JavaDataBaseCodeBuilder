@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.collections.FXCollections?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.codedb.controller.AddSearch">
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <items>
+                <Button fx:id="btnClear" mnemonicParsing="false" onAction="#btnClearAction" text="清空" />
+                <Button fx:id="btnRun" mnemonicParsing="false" onAction="#btnRunAction" text="执行已选">
+               <tooltip>
+                  <Tooltip text="执行选中的SQL语句">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip></Button>
+                <Button fx:id="btnRunAll" mnemonicParsing="false" onAction="#btnRunAllAction" text="执行全部">
+               <tooltip>
+                  <Tooltip text="执行代码框内所有语句（不可批量执行）">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip></Button>
+                <Button fx:id="btnRunSearch" mnemonicParsing="false" onAction="#btnRunSearchAction" text="执行查询">
+               <tooltip>
+                  <Tooltip text="执行有结果集的查询语句">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip></Button>
+                <ChoiceBox fx:id="btnMaxSearchRows" prefWidth="150.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <Integer fx:value="100" />
+                            <Integer fx:value="200" />
+                            <Integer fx:value="300" />
+                            <Integer fx:value="500" />
+                            <Integer fx:value="1000" />
+                        </FXCollections>
+                    </items>
+               <tooltip>
+                  <Tooltip text="设置查询最大显示行数">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+                </ChoiceBox>
+            </items>
+        </ToolBar>
+        <Label fx:id="labelNowDB" text="当前数据库：">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <padding>
+                <Insets left="10.0" right="10.0" />
+            </padding>
+        </Label>
+        <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" VBox.vgrow="ALWAYS">
+            <items>
+                <TextArea fx:id="textSQLCode" prefHeight="200.0" prefWidth="200.0">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </TextArea>
+                <TextArea fx:id="textResult" prefHeight="200.0" prefWidth="200.0" wrapText="true">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </TextArea>
+            </items>
+        </SplitPane>
+    </children>
+</VBox>

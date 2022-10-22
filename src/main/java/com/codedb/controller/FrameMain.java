@@ -1,7 +1,6 @@
 package com.codedb.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -11,10 +10,7 @@ import com.codedb.componentsHandler.*;
 import com.codedb.model.HistoryItemData;
 import com.codedb.model.ToolsNodeData;
 import com.codedb.model.TreeNodeData;
-import com.codedb.utils.DBTools;
-import com.codedb.utils.FrameManager;
-import com.codedb.utils.ListViewImageCellFactory;
-import com.codedb.utils.TreeTableImageCellFactory;
+import com.codedb.utils.*;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -31,7 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class FrameMain {
-	public static Connection con = null;
+	public static ManagedConnection mcon = null;
 
 	@FXML
 	private BorderPane basePane;
@@ -85,8 +81,8 @@ public class FrameMain {
 	 * @Description 初始化设置连接类
 	 * @Params [con 传入connection对象]
 	 **/
-	public void setCon(Connection con) {
-		FrameMain.con = con;
+	public void setCon(ManagedConnection con) {
+		FrameMain.mcon = con;
 	}
 
 	/**
@@ -115,7 +111,7 @@ public class FrameMain {
 	public void initLeftTreeView() {
 		List<String> list = new LinkedList<>();
 		try {
-			list = DBTools.getDatabasesName(con);
+			list = DBTools.getDatabasesName(mcon);
 			// 清空工具栏
 			leftToolListView.getItems().clear();
 			// 数据库名渲染到treetableview
@@ -152,7 +148,7 @@ public class FrameMain {
 				// 添加数据库中的表到树形列表
 				List<String> tables = null;
 				try {
-					tables = DBTools.getTablesName(con, dbName);
+					tables = DBTools.getTablesName(mcon, dbName);
 					for (String tableName : tables) {
 						TreeNodeData treeNodeData = new TreeNodeData(tableName, TreeNodeData.TABLE_NODE);
 						treeNodeData.setParent(dbNodeData);
@@ -205,6 +201,7 @@ public class FrameMain {
 			}
 		});
 		leftToolListView.getItems().add(new ToolsNodeData("数据库名称：" + title, ToolsNodeData.DB_NAME, title));
+		leftToolListView.getItems().add(new ToolsNodeData("新增查询", ToolsNodeData.ADD_SEARCH, title));
 		leftToolListView.getItems().add(new ToolsNodeData("添加表", ToolsNodeData.ADD_TABLE, title));
 		leftToolListView.getItems().add(new ToolsNodeData("删除数据库", ToolsNodeData.REMOVE_DB, title));
 		// 绑定工具栏点击事件
@@ -214,8 +211,9 @@ public class FrameMain {
 				switch (cell.getType()) {
 					// 点击 数据库名称
 					case ToolsNodeData.DB_NAME -> MainToolsFunctionBinder.dbName(cell.getDbName());
-					case ToolsNodeData.ADD_TABLE -> MainToolsFunctionBinder.addTable(con, cell.getDbName());
-					case ToolsNodeData.REMOVE_DB -> MainToolsFunctionBinder.removeDB(con, cell.getDbName());
+					case ToolsNodeData.ADD_SEARCH -> MainToolsFunctionBinder.addSearch(cell.getDbName());
+					case ToolsNodeData.ADD_TABLE -> MainToolsFunctionBinder.addTable(mcon, cell.getDbName());
+					case ToolsNodeData.REMOVE_DB -> MainToolsFunctionBinder.removeDB(mcon, cell.getDbName());
 				}
 			}
 		});
@@ -249,23 +247,23 @@ public class FrameMain {
 					// 点击 表名称
 					case ToolsNodeData.TABLE_NAME -> MainToolsFunctionBinder.tableName(cell.getTableName());
 					// 显示表结构
-					case ToolsNodeData.SHOW_TABLE_STRUCTURE -> MainToolsFunctionBinder.showTableInfo(con,
+					case ToolsNodeData.SHOW_TABLE_STRUCTURE -> MainToolsFunctionBinder.showTableInfo(mcon,
 							cell.getDbName(), cell.getTableName());
 					// 数据集 到 数据库
-					case ToolsNodeData.RESULTSET_TO_DB -> MainToolsFunctionBinder.resultSetToDB(con, cell.getDbName(),
+					case ToolsNodeData.RESULTSET_TO_DB -> MainToolsFunctionBinder.resultSetToDB(mcon, cell.getDbName(),
 							cell.getTableName(), menuShowAnnotation.isSelected(), menuUseIndex.isSelected());
 					// 从 页面 到 数据库
-					case ToolsNodeData.TEXT_TO_DB -> MainToolsFunctionBinder.frameToDB(con, cell.getDbName(),
+					case ToolsNodeData.TEXT_TO_DB -> MainToolsFunctionBinder.frameToDB(mcon, cell.getDbName(),
 							cell.getTableName(), menuShowAnnotation.isSelected());
 					// 从 数据库 到 数据集
-					case ToolsNodeData.DB_TO_RESULTSET -> MainToolsFunctionBinder.dbToResultSet(con, cell.getDbName(),
+					case ToolsNodeData.DB_TO_RESULTSET -> MainToolsFunctionBinder.dbToResultSet(mcon, cell.getDbName(),
 							cell.getTableName(), menuShowAnnotation.isSelected());
 					// 从 数据集 到 页面
-					case ToolsNodeData.RESULTSET_TO_TEXT -> MainToolsFunctionBinder.resultSetToFrame(con,
+					case ToolsNodeData.RESULTSET_TO_TEXT -> MainToolsFunctionBinder.resultSetToFrame(mcon,
 							cell.getDbName(), cell.getTableName(), menuShowAnnotation.isSelected(),
 							menuUseIndex.isSelected());
 					// 删除表
-					case ToolsNodeData.REMOVE_TABLE -> MainToolsFunctionBinder.removeTable(con, cell.getDbName(),
+					case ToolsNodeData.REMOVE_TABLE -> MainToolsFunctionBinder.removeTable(mcon, cell.getDbName(),
 							cell.getTableName());
 				}
 			}
@@ -291,6 +289,11 @@ public class FrameMain {
 		}
 		stage.show();
 		FrameManager.setFrame("AddDataBase", fxmlLoader.getController(), stage);
+	}
+
+	public void menuCreateDataBasemenuRefreshDataBase(ActionEvent actionEvent)
+	{
+		initLeftTreeView();
 	}
 
 	/**
@@ -344,6 +347,7 @@ public class FrameMain {
 		}
 	}
 
+
 	/**
 	 * @Description 回调
 	 **/
@@ -352,7 +356,7 @@ public class FrameMain {
 			PreparedStatement preparedStatement;
 			String error = "";
 			try {
-				preparedStatement = con.prepareStatement("CREATE DATABASE " + dbName + ";");
+				preparedStatement = mcon.con.prepareStatement("CREATE DATABASE " + dbName + ";");
 				if (preparedStatement.executeUpdate() == 1) {
 					init();
 					MainHistoryHandle.add("创建数据库<" + dbName + ">成功", HistoryItemData.SUCCESS);

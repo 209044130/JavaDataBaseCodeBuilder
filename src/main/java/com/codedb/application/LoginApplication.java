@@ -3,6 +3,7 @@ package com.codedb.application;
 import java.io.IOException;
 
 import com.codedb.utils.FrameManager;
+import com.codedb.utils.PropertiesGetter;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,9 @@ public class LoginApplication extends Application {
 			p = loginXML.load();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		if (!PropertiesGetter.init()) {
+			return;
 		}
 		Scene scene = new Scene(p);
 		stage.setScene(scene);

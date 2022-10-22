@@ -1,6 +1,5 @@
 package com.codedb.controller;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -8,6 +7,7 @@ import com.codedb.componentsHandler.MainHistoryHandle;
 import com.codedb.model.HistoryItemData;
 import com.codedb.model.TableInfoData;
 import com.codedb.utils.FrameManager;
+import com.codedb.utils.ManagedConnection;
 import com.codedb.utils.TableCheckBoxCellFactory;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -23,7 +23,7 @@ import javafx.util.Callback;
 
 public class AddTable {
 	// 存放当前连接的名称
-	private Connection con;
+	private ManagedConnection mcon;
 	// 存放当前数据库的名称
 	private String dbName;
 
@@ -52,8 +52,8 @@ public class AddTable {
 	private ObservableList<TableInfoData> observableList = FXCollections.observableArrayList();
 
 	// 初始化
-	public void init(Connection con, String dbName) {
-		this.con = con;
+	public void init(ManagedConnection mcon, String dbName) {
+		this.mcon = mcon;
 		this.dbName = dbName;
 		columnName.setCellFactory(TextFieldTableCell.forTableColumn());
 		columnName.setCellValueFactory(TableInfoData.getStringValueCell(1));
@@ -164,9 +164,9 @@ public class AddTable {
 			return;
 		}
 		try {
-			PreparedStatement preparedStatement1 = con.prepareStatement("use " + dbName + ";");
+			PreparedStatement preparedStatement1 = mcon.con.prepareStatement("use " + dbName + ";");
 			preparedStatement1.execute();
-			PreparedStatement preparedStatement2 = con.prepareStatement(sql);
+			PreparedStatement preparedStatement2 = mcon.con.prepareStatement(sql);
 			preparedStatement2.execute();
 			// 刷新表
 			FrameMain frameMain = (FrameMain) FrameManager.getController("FrameMain");

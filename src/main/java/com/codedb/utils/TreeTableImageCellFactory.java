@@ -9,6 +9,7 @@ import javafx.scene.control.TreeTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 public class TreeTableImageCellFactory
 {
@@ -27,6 +28,7 @@ public class TreeTableImageCellFactory
                     }
                     hBox.getChildren().add(new ImageView(image));
                     this.setText(s.getTitle());
+                    this.setFont(new Font(14));
                     this.setGraphic(hBox);
                 } else {
                     this.setText("");
